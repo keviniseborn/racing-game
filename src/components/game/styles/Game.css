@@ -62,3 +62,23 @@
 .game-hud p {
   margin: 0.25rem 0;
 }
+
+.menu-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.customize-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #0066cc; /* Blue */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.customize-button:hover {
+  background-color: #0055aa;
+}

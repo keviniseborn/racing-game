@@ -7,21 +7,30 @@ interface GameUIProps {
   score: number;
   gameState: GameState;
   onStartGame: () => void;
+  onCustomize: () => void; // New prop for customization
 }
 
-const GameUI: React.FC<GameUIProps> = ({ isPlaying, score, gameState, onStartGame }) => {
+const GameUI: React.FC<GameUIProps> = ({ isPlaying, score, gameState, onStartGame, onCustomize }) => {
   return (
     <>
       {!isPlaying && (
         <div className="start-screen">
           <h1 className="game-title">Racing Game</h1>
           <p className="game-instructions">Use arrow keys to drive the car around the track</p>
-          <button 
-            onClick={onStartGame}
-            className="start-button"
-          >
-            Start Game
-          </button>
+          <div className="menu-buttons">
+            <button 
+              onClick={onStartGame}
+              className="start-button"
+            >
+              Start Game
+            </button>
+            <button 
+              onClick={onCustomize}
+              className="customize-button"
+            >
+              Customize Car
+            </button>
+          </div>
         </div>
       )}
       

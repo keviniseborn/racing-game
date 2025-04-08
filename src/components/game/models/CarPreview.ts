@@ -1,12 +1,14 @@
 import * as THREE from 'three';
-import { initialGameState } from '../GameState';
 
-export const createCar = (scene: THREE.Scene, carColor: number = 0xFF0000): THREE.Group => {
+/**
+ * Creates a simplified car model for the customization preview
+ */
+export const createCarPreview = (scene: THREE.Scene, color: number): THREE.Group => {
   const carGroup = new THREE.Group();
   
   // Car body
   const carBodyGeometry = new THREE.BoxGeometry(1.5, 0.5, 3);
-  const carBodyMaterial = new THREE.MeshStandardMaterial({ color: carColor });
+  const carBodyMaterial = new THREE.MeshStandardMaterial({ color });
   const carBody = new THREE.Mesh(carBodyGeometry, carBodyMaterial);
   carBody.position.y = 0.25;
   carBody.castShadow = true;
@@ -22,7 +24,7 @@ export const createCar = (scene: THREE.Scene, carColor: number = 0xFF0000): THRE
   
   // Car front wing
   const frontWingGeometry = new THREE.BoxGeometry(2, 0.1, 0.5);
-  const frontWingMaterial = new THREE.MeshStandardMaterial({ color: carColor }); 
+  const frontWingMaterial = new THREE.MeshStandardMaterial({ color });
   const frontWing = new THREE.Mesh(frontWingGeometry, frontWingMaterial);
   frontWing.position.set(0, 0.2, 1.4);
   frontWing.castShadow = true;
@@ -30,7 +32,7 @@ export const createCar = (scene: THREE.Scene, carColor: number = 0xFF0000): THRE
   
   // Car rear wing
   const rearWingGeometry = new THREE.BoxGeometry(2, 0.5, 0.1);
-  const rearWingMaterial = new THREE.MeshStandardMaterial({ color: carColor });
+  const rearWingMaterial = new THREE.MeshStandardMaterial({ color });
   const rearWing = new THREE.Mesh(rearWingGeometry, rearWingMaterial);
   rearWing.position.set(0, 0.5, -1.4);
   rearWing.castShadow = true;
@@ -39,15 +41,15 @@ export const createCar = (scene: THREE.Scene, carColor: number = 0xFF0000): THRE
   // Wheels
   addWheels(carGroup);
   
-  // Position car on the track
-  carGroup.position.copy(initialGameState.carPosition);
+  // Position car in preview scene
+  carGroup.position.y = 0.5;
   scene.add(carGroup);
   
   return carGroup;
 };
 
 /**
- * Adds wheels to the car
+ * Adds wheels to the car preview
  */
 const addWheels = (carGroup: THREE.Group) => {
   const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 32);

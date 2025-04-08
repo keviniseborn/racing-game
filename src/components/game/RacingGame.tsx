@@ -6,13 +6,23 @@ import { GameState, initialGameState } from './GameState';
 import { handleControls } from './utils/Controls';
 import { updateGameState } from './utils/GameLogic';
 import GameUI from './GameUI';
+import CarCustomization from './menu/car-customisation/CarCustomisation';
+import { useCarCustomization } from './context/CarContext';
 import './styles/Game.css';
+
+// Define a screen enum to handle navigation
+enum Screen {
+  MENU,
+  CUSTOMIZE,
+  PLAYING
+}
 
 const RacingGame: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.MENU);
   const [score, setScore] = useState<number>(0);
   const gameStateRef = useRef<GameState>({...initialGameState});
+  const { carColor } = useCarCustomization();
   
   useEffect(() => {
     if (!mountRef.current) return;
@@ -22,7 +32,7 @@ const RacingGame: React.FC = () => {
     
     // Create game elements
     createTrack(scene);
-    const carGroup = createCar(scene);
+    const carGroup = createCar(scene, carColor); // Pass car color from context
     
     // Set up event listeners for controls
     const { handleKeyDown, handleKeyUp } = handleControls(gameStateRef);
@@ -32,7 +42,7 @@ const RacingGame: React.FC = () => {
     
     // Animation loop
     const animate = () => {
-      if (isPlaying) {
+      if (currentScreen === Screen.PLAYING) {
         updateGameState(gameStateRef, carGroup, camera, setScore);
       }
       
@@ -64,24 +74,50 @@ const RacingGame: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       cleanupFn();
     };
-  }, [isPlaying]);
+  }, [currentScreen, carColor]); // Re-run when screen changes or car color changes
   
   const startGame = () => {
-    setIsPlaying(true);
+    setCurrentScreen(Screen.PLAYING);
     setScore(0);
     // Reset game state
     gameStateRef.current = {...initialGameState};
   };
   
+  const goToCustomization = () => {
+    setCurrentScreen(Screen.CUSTOMIZE);
+  };
+  
+  const backToMenu = () => {
+    setCurrentScreen(Screen.MENU);
+  };
+  
   return (
     <div className="game-container">
       <div ref={mountRef} className="game-canvas" />
-      <GameUI 
-        isPlaying={isPlaying} 
-        score={score} 
-        gameState={gameStateRef.current}
-        onStartGame={startGame} 
-      />
+      
+      {currentScreen === Screen.MENU && (
+        <GameUI 
+          isPlaying={false} 
+          score={score} 
+          gameState={gameStateRef.current}
+          onStartGame={startGame}
+          onCustomize={goToCustomization}
+        />
+      )}
+      
+      {currentScreen === Screen.CUSTOMIZE && (
+        <CarCustomization onBack={backToMenu} />
+      )}
+      
+      {currentScreen === Screen.PLAYING && (
+        <GameUI 
+          isPlaying={true} 
+          score={score} 
+          gameState={gameStateRef.current}
+          onStartGame={startGame}
+          onCustomize={goToCustomization}
+        />
+      )}
     </div>
   );
 };
