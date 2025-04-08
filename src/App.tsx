@@ -1,13 +1,13 @@
-import ThreeScene from './components/ThreeScene';
-import './App.css'
+import React from 'react';
+import RacingGame from './components/game/RacingGame';
+import './App.css';
 
-function App() {
-
+const App: React.FC = () => {
   return (
     <div className="App">
-      <ThreeScene />
-      </div>
-  )
-}
+      <RacingGame />
+    </div>
+  );
+};
 
-export default App
+export default App;
