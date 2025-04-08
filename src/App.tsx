@@ -1,12 +1,15 @@
 import React from 'react';
 import RacingGame from './components/game/RacingGame';
+import { AppProviders } from './components/game/context/AppProviders';
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <RacingGame />
-    </div>
+    <AppProviders>
+      <div className="App">
+        <RacingGame />
+      </div>
+    </AppProviders>
   );
 };
 
