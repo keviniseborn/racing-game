@@ -21,7 +21,7 @@ const RacingGame: React.FC = () => {
     const { scene, camera, renderer, cleanupFn } = initScene(mountRef.current);
     
     // Create game elements
-    const track = createTrack(scene);
+    createTrack(scene);
     const carGroup = createCar(scene);
     
     // Set up event listeners for controls
